@@ -303,6 +303,7 @@ class ReviewerToolsSheet extends StatelessWidget {
               final lng = double.tryParse(lngController.text) ?? settings.officeLongitude;
               final rad = double.tryParse(radiusController.text) ?? settings.geofenceRadius;
               settings.updateOfficeCoordinates(lat: lat, lng: lng, radius: rad);
+              context.read<EmployeeProvider>().updateOfficeLocation(lat, lng);
               Navigator.of(ctx).pop();
             },
             child: const Text('Save'),

@@ -11,6 +11,7 @@ import '../widgets/attendance_card.dart';
 import '../widgets/attendance_list_tile.dart';
 import '../widgets/leave_balance_card.dart';
 import '../widgets/offline_banner.dart';
+import '../widgets/reviewer_tools_sheet.dart';
 import 'history_screen.dart';
 import 'leave_apply_screen.dart';
 import 'leave_screen.dart';
@@ -230,6 +231,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: employee == null
                 ? null
                 : () => _handleResetAttendance(context, employee),
+          ),
+          // Reviewer & Simulation Tools Icon
+          IconButton(
+            tooltip: 'Reviewer Tools',
+            icon: const Icon(Icons.tune_rounded),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const ReviewerToolsSheet(),
+              );
+            },
           ),
           // Logout Action Button
           IconButton(

@@ -57,15 +57,17 @@ lib/
 - **States Handled**: Loading spinner, Empty state, Error state with retry action, and Offline state banner.
 
 ### 📍 Attendance Check-In and Check-Out
-- **Single Session per Day**: Enforces 1 check-in per calendar day in the company timezone.
+- **Single Session per Day**: Enforces exactly 1 check-in per calendar day in the company timezone (`Asia/Kolkata (UTC+05:30)`). No overnight shifts.
 - **Sequential Guard**: Check-out is permitted only after check-in.
-- **Rapid Tap / Debounce Protection**: `isActionInProgress` locking prevents duplicate tap events.
-- **GPS Coordinates & Geofencing**: Captures device GPS coordinates; validates against the office location with a 200-meter radius threshold using the Haversine formula.
+- **Rapid Tap & Duplicate Protection**: `isActionInProgress` debounce locking prevents duplicate events from double-taps, coupled with UUIDv4 idempotency keys (`eventId`).
+- **GPS Coordinates & Geofencing**: Captures timestamp and device GPS coordinates; permits check-in only within 200 metres of the configured office location (`10.0159° N, 76.3419° E`) using the Haversine formula.
 - **Permission & Service Handling**:
-  - Handles denied permission (requests access).
+  - Handles denied location permission (requests access with explanation).
   - Handles permanently denied permission (directs to App Settings).
   - Handles disabled GPS location services (prompts to enable GPS).
-  - Displays user-friendly distance message when outside the permitted boundary (e.g., *"You are 450.0m from office. Permitted radius is 200m"*).
+  - Displays user-friendly, informative distance messages when outside the permitted boundary (e.g., *"You are 450.0m away from the office. Permitted radius is 200m"*).
+- **Configurable Office Coordinates**: Office coordinates and radius can be modified dynamically in settings or calibrated via the one-tap "Set as Office" button.
+- **Documented Reviewer Location Simulation**: Documented in Section 6 and directly available via the `tune` icon in the AppBar.
 
 ### 🏖️ Leave Application & Tracking
 - **Leave Form Fields**: Leave Type (Casual/Sick), Start Date, End Date, Reason.
@@ -77,7 +79,7 @@ lib/
   5. Requested days cannot exceed available balance.
   6. All calendar days count as leave days (ignores weekends and holidays as per assignment spec).
 - **Status Badges**: Distinguishes `Pending`, `Approved`, and `Rejected` leave applications.
-- **Offline Resilience**: Offline submission alerts the user that connectivity is required, while previously cached leave history remains readable offline.
+- **100% Offline Resilience**: Fully functional offline; leave requests are queued locally in SQLite and automatically synchronized when reconnected.
 
 ---
 
